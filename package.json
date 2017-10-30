@@ -1,0 +1,28 @@
+{
+  "name": "sequelize-express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "deploy": "yarn lint && git push heroku master",
+    "prod": "node --harmony index.js",
+    "dev": "nodemon --harmony index.js",
+    "sequelize": "sequelize",
+    "lint": "eslint index.js"
+  },
+  "engines": {
+    "node": "8.7.0"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "morgan": "^1.9.0",
+    "pg": "^7.3.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.15.0",
+    "sequelize-cli": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "nodemon": "^1.12.1"
+  }
+}
