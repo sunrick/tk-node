@@ -1,30 +1,38 @@
 const router = require('express').Router()
+const models = require('../models')
+const asyncMiddleware = require('./middleware/asyncMiddleware.js')
+const Auth = require('./middleware/auth.js')
 
-function gError(fn) {
-  return (req, res, next) => {
-    Promise.resolve(fn(req, res, next))
-      .catch(next)
-  }
-}
 async function signUp(req, res) {
-  const hashedPassword =  await bcrypt.hash(req.body.password, 12)
+  const password = req.body.password
+  if (password) {
+    password = await Auth.hashPassword(req.body.password)
+  }
   const user = await models.User.create({
     email: req.body.email,
-    password: hashedPassword
+    password: password
   })
-  const token =
-  res.send(Object.assign(user, {token: token}))
+  const json = Object.assign(
+    user, {
+      token: await Auth.genToken()
+    }
+  )
+  res.send(json)
 }
 
 async function signIn(req, res) {
-  res.send({ loggedIn: true })
+  const user = await models.User.findOne({ where: {email: req.body.email} })
+  if(await Auth.authenticate(user.password, req.body.password)) {
+    res.send({
+      token: await Auth.genToken()
+    })
+  } else {
+    res.status(400)
+    res.send({message: "Email or password incorrect"})
+  }
 }
 
-function genToken() {
-  return  jwt.sign({ exp: Math.floor(Date.now() / 1000) + (60 * 60) }, process.env.SECRET)
-}
-
-router.post('/sign_up', gError(signUp))
-router.post('/sign_in', gError(signIn))
+router.post('/sign_up', asyncMiddleware(signUp))
+router.post('/sign_in', asyncMiddleware(signIn))
 
 module.exports = router
