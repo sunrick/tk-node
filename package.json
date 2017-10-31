@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "yarn lint && git push heroku master",
     "prod": "node --harmony index.js",
-    "dev": "nodemon --harmony index.js",
+    "dev": "nodemon --inspect --harmony index.js",
     "sequelize": "sequelize",
     "lint": "eslint index.js"
   },
@@ -14,8 +14,12 @@
     "node": "8.7.0"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "helmet": "^3.9.0",
+    "jsonwebtoken": "^8.1.0",
     "morgan": "^1.9.0",
     "pg": "^7.3.0",
     "pg-hstore": "^2.3.2",
