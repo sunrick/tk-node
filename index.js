@@ -19,6 +19,7 @@ app.use(morgan('combined'))
 app.use('/', registration)
 
 app.use((err, req, res, next) => {
+  res.status(422)
   res.send({ error: err.toString() })
   next()
 })

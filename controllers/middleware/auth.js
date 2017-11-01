@@ -17,7 +17,7 @@ class Auth {
     return jwt.sign({ exp: Math.floor(Date.now() / 1000) + (60 * 60) }, process.env.SECRET)
   }
 
-  static middleware(req, res, next) {
+  static protect(req, res, next) {
     try {
       const decoded = jwt.verify(token, process.env.SECRET)
     } catch(e) {
